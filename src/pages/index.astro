@@ -1,64 +1,163 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
-import { site, categories } from '../data/site';
+import { site, categories, steps } from '../data/site';
 import { getPosts } from '../lib/posts';
 
 const posts = await getPosts();
 const latest = posts.slice(0, 6);
 const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].order);
 ---
-<Base>
+<Base image="/images/avatar-square.jpg">
+  <!-- 冒頭の手紙（顔＋語りかけ）。旧ブログの「問いかけの見出し」と「サイドの顔」を、最初の画面にまとめて置く -->
   <section class="hero">
-    <div class="wrap">
-      <p class="eyebrow">{site.tagline}</p>
-      <h1>「後回し」を、<br class="sp" />やめた。</h1>
-      <p class="lead">
-        岐阜県で開発許可などの許認可を扱う行政書士です。事務に追われて、やりたいことをずっと後回しにしていました。
-        AIを組み込んだ個人事務所を実際に動かしながら、うまくいったことも、直したところも、そのまま書いていきます。
-        士業や小さな事業をやっていて「忙しくてAIまで手が回らない」と思っている人に、そうでもないよ、と伝えたい。
-      </p>
-      <p><a class="btn" href="/posts/">記事を読む</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 class="sec-h">最新の記事</h2>
-      {latest.length > 0 ? (
-        <ul class="postlist">{latest.map((p) => <PostCard post={p} />)}</ul>
-      ) : (
-        <p class="small">準備中です。</p>
-      )}
-      {posts.length > 6 && <p style="margin-top:1rem"><a class="btn btn--ghost" href="/posts/">すべての記事</a></p>}
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 class="sec-h">カテゴリ</h2>
-      <div class="cats">
-        {catList.map(([key, c]) => (
-          <a class="cat" href={`/category/${key}/`}>
-            <strong>{c.name}</strong>
-            <span>{c.desc}</span>
-          </a>
-        ))}
+    <div class="hero__art" aria-hidden="true"></div>
+    <div class="wrap hero__in">
+      <img class="hero__avatar" src={site.avatar} alt="" width="512" height="512" fetchpriority="high" />
+      <div class="hero__letter">
+        <p class="eyebrow">{site.tagline}</p>
+        <h1>「後回し」を、<br class="sp" />やめた。</h1>
+        <p class="hero__greeting">かずっちゃです。</p>
+        <p class="lead">
+          岐阜県で、開発許可などの土地の許認可を扱う行政書士をしています。
+          事務に追われて、やりたいことをずっと後回しにしていました。
+          いまは、AIを組み込んだ個人事務所を実際に動かしながら、うまくいったことも、直したところも、そのまま書いています。
+        </p>
+        <p class="lead">
+          士業や小さな事業をやっていて「忙しくてAIまで手が回らない」と思っているあなたに、そうでもないよ、と伝えたい。
+        </p>
+        <p class="hero__actions"><a class="btn" href="/posts/">記事を読む</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
       </div>
     </div>
   </section>
+
+  <div class="wrap layout">
+    <!-- メイン: 旧ブログの「新着記事」を継ぐ -->
+    <main class="main">
+      <section>
+        <h2 class="sec-h">最新の記事</h2>
+        {latest.length > 0 ? (
+          <ul class="postlist">{latest.map((p) => <PostCard post={p} />)}</ul>
+        ) : (
+          <div class="empty">
+            <p>準備中です。最初の記事は「一人の行政書士事務所を、AIと一緒に回してみることにした」。<br />2026年の夏の記録から書き始めます。</p>
+          </div>
+        )}
+        {posts.length > 6 && <p style="margin-top:1rem"><a class="btn btn--ghost" href="/posts/">すべての記事</a></p>}
+      </section>
+
+      <section>
+        <h2 class="sec-h">カテゴリ</h2>
+        <div class="cats">
+          {catList.map(([key, c]) => (
+            <a class="cat" href={`/category/${key}/`}>
+              <strong>{c.name}</strong>
+              <span>{c.desc}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <!-- サイド: 旧ブログの「プロフィール／5step／カテゴリ」を継ぐ -->
+    <aside class="side">
+      <section class="card profile">
+        <img src={site.avatar} alt="" width="160" height="160" loading="lazy" />
+        <p class="profile__name">{site.name}</p>
+        <p class="profile__bio">{site.bio}</p>
+        <a class="profile__more" href="/about/">詳しくはこちら →</a>
+      </section>
+
+      <section class="card">
+        <h3 class="card__h">AI事務所のはじめ方 5ステップ</h3>
+        <ol class="steps">
+          {steps.map((s) => (
+            <li>
+              <a href={s.href}>
+                <span class="steps__n">{s.n}</span>
+                <span class="steps__body"><strong>{s.title}</strong><span>{s.desc}</span></span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="small" style="margin:.6rem 0 0">ぼくが実際に踏んだ順です。記事ができ次第つなぎます。</p>
+      </section>
+
+      <section class="card">
+        <h3 class="card__h">カテゴリ</h3>
+        <ul class="sidelist">
+          {catList.map(([key, c]) => <li><a href={`/category/${key}/`}>{c.name}</a></li>)}
+        </ul>
+      </section>
+
+      <section class="card">
+        <h3 class="card__h">事務所の仕事</h3>
+        <p class="small" style="margin:0 0 .6rem">土地の許認可（開発許可・建築許可・盛土・農地）のご相談は事務所サイトへ。</p>
+        <a class="btn btn--ghost btn--block" href={site.officeUrl} target="_blank" rel="noopener">{site.officeName} ↗</a>
+        {site.x && <p class="small" style="margin:.8rem 0 0"><a href={site.x} target="_blank" rel="noopener">X（旧Twitter）で日々のつぶやき ↗</a></p>}
+      </section>
+    </aside>
+  </div>
 </Base>
 
 <style>
-  .hero { padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #fff 0%, var(--bg) 100%); }
-  .hero h1 { font-size: 2rem; }
-  .lead { max-width: 640px; color: var(--ink-soft); }
+  /* 冒頭の手紙 */
+  .hero { position: relative; overflow: hidden; padding: 3rem 0 2.6rem; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #fff 0%, var(--bg) 100%); }
+  .hero__art { position: absolute; inset: 0; background: url('/images/hero-desk.jpg') right center / auto 100% no-repeat; opacity: .18; pointer-events: none; -webkit-mask-image: linear-gradient(90deg, transparent 45%, #000 78%); mask-image: linear-gradient(90deg, transparent 45%, #000 78%); }
+  .hero__in { position: relative; display: grid; grid-template-columns: 168px 1fr; gap: 2rem; align-items: start; }
+  .hero__avatar { width: 168px; height: 168px; border-radius: 50%; box-shadow: 0 8px 24px rgba(31,37,48,.12); background: #fff; }
+  .hero h1 { font-size: 2.1rem; margin-bottom: .5em; }
+  .hero__greeting { font-weight: 700; margin: 0 0 .4em; color: var(--ink); }
+  .lead { max-width: 640px; color: var(--ink-soft); margin-bottom: .9em; }
+  .hero__actions { margin-top: 1.2rem; }
+
+  /* 2カラム */
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2.5rem; padding-top: 2.5rem; padding-bottom: 3rem; align-items: start; }
+  .main > section + section { margin-top: 2.5rem; }
   .sec-h { border: 0; padding: 0; margin: 0 0 1rem; font-size: 1.2rem; }
+  .empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); padding: 1.2rem 1.4rem; color: var(--ink-soft); font-size: .95rem; }
+  .empty p { margin: 0; }
   .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
   .cat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.3rem; text-decoration: none; color: inherit; display: grid; gap: .3rem; }
   .cat:hover { box-shadow: 0 6px 20px rgba(31,122,140,.10); color: inherit; }
   .cat strong { color: var(--accent-dark); }
   .cat span { font-size: .88rem; color: var(--ink-soft); }
+
+  /* サイド */
+  .side { position: sticky; top: 1.25rem; display: grid; gap: 1.2rem; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.3rem; }
+  .card__h { margin: 0 0 .8rem; font-size: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--line); }
+  .profile { text-align: center; }
+  .profile img { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto .6rem; display: block; }
+  .profile__name { font-weight: 700; margin: 0 0 .3rem; }
+  .profile__bio { font-size: .88rem; color: var(--ink-soft); text-align: left; margin: 0 0 .7rem; }
+  .profile__more { font-size: .88rem; font-weight: 700; text-decoration: none; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+  .steps li { margin: 0; }
+  .steps a { display: grid; grid-template-columns: 30px 1fr; gap: .7rem; align-items: start; text-decoration: none; color: inherit; padding: .35rem .3rem; border-radius: 6px; }
+  .steps a:hover { background: var(--tint); color: inherit; }
+  .steps__n { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: .85rem; display: grid; place-items: center; }
+  .steps__body { display: grid; line-height: 1.5; }
+  .steps__body strong { font-size: .95rem; }
+  .steps__body span { font-size: .8rem; color: var(--muted); }
+  .sidelist { list-style: none; margin: 0; padding: 0; }
+  .sidelist li { margin: 0; border-bottom: 1px dashed var(--line); }
+  .sidelist li:last-child { border-bottom: 0; }
+  .sidelist a { display: block; padding: .5rem .2rem; text-decoration: none; color: var(--ink); font-size: .95rem; }
+  .sidelist a:hover { color: var(--accent); }
+  .btn--block { display: block; text-align: center; }
+
   .sp { display: none; }
-  @media (max-width: 640px) { .hero h1 { font-size: 1.5rem; } .sp { display: inline; } }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 2rem; }
+    .side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 2.2rem 0 2rem; }
+    .hero__in { grid-template-columns: 1fr; gap: 1rem; }
+    .hero__avatar { width: 112px; height: 112px; }
+    .hero__art { opacity: .10; -webkit-mask-image: linear-gradient(180deg, transparent 30%, #000 100%); mask-image: linear-gradient(180deg, transparent 30%, #000 100%); background-position: center bottom; background-size: 140% auto; }
+    .hero h1 { font-size: 1.6rem; }
+    .sp { display: inline; }
+  }
 </style>

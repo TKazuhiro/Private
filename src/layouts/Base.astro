@@ -12,7 +12,7 @@ interface Props {
 const { title, description = site.description, type = 'website', image, publishedTime } = Astro.props;
 const fullTitle = title ? `${title}｜${site.title}` : `${site.title}｜${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
-const ogImage = new URL(image ?? '/images/og-default.png', site.url).href;
+const ogImage = new URL(image ?? '/images/avatar-square.jpg', site.url).href;
 const current = Astro.url.pathname;
 ---
 <!doctype html>

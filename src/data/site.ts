@@ -12,7 +12,20 @@ export const site = {
   officeUrl: 'https://office-lifechange.com',
   x: '', // 【要確認】Xのプロフィールurl（例: https://x.com/xxxx）
   note: '', // 【要確認】noteのurl
+  avatar: '/images/avatar-512.png', // 水彩アイコン（本人写真をもとに生成・2026-08-17）
+  /** サイドのプロフィールカード用の短い自己紹介（3行） */
+  bio: '岐阜県で土地の許認可を扱う行政書士。地方公務員を41歳で辞めて独立。事務に追われる個人事務所を、AIといっしょに育てている途中です。',
 };
+
+/** サイドの固定導線「AI事務所のはじめ方 5ステップ」
+ *  実際に踏んだ順（2026-07〜08の記録）。記事ができたら href を記事に差し替える */
+export const steps = [
+  { n: 1, title: '第2の脳を作る', desc: 'Obsidianに知識・案件・日誌を集める', href: '/category/dougu/' },
+  { n: 2, title: 'AIをつなぐ', desc: 'Claude Codeを脳の上で動かす', href: '/category/dougu/' },
+  { n: 3, title: '業務を棚卸しする', desc: '30業務を並べて役割ごとに社員を立てる', href: '/category/kangaekata/' },
+  { n: 4, title: '実案件で使って直す', desc: '構築の翌日から本番。詰まったら直す', href: '/category/jitsuroku/' },
+  { n: 5, title: '外出先から動かす', desc: 'Discordで指示→自宅PCが無人で処理', href: '/category/dougu/' },
+];
 
 /** 4カテゴリ（構成会議 2026-08-16 承認） */
 export const categories = {
