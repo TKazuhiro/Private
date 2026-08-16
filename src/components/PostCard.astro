@@ -1,0 +1,20 @@
+---
+import { categories } from '../data/site';
+import { fmt, type Post } from '../lib/posts';
+interface Props { post: Post; heading?: 'h2' | 'h3' }
+const { post, heading = 'h3' } = Astro.props;
+const H = heading;
+const cat = categories[post.data.category];
+---
+<li>
+  <a class="post-card" href={`/posts/${post.id}/`}>
+    <div class="post-card__meta">
+      <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+      <span class="chip">{cat.name}</span>
+      {post.data.draft && <span class="chip" style="background:#fde8e6;color:#a33">下書き</span>}
+    </div>
+    <H>{post.data.title}</H>
+    <p>{post.data.description}</p>
+    {post.data.cover && <img src={post.data.cover} alt="" loading="lazy" width="320" height="200" />}
+  </a>
+</li>

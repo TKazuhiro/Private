@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { categories, type CategoryKey } from '../../data/site';
+import { getPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return (Object.keys(categories) as CategoryKey[]).map((key) => ({
+    params: { cat: key },
+    props: { key, posts: posts.filter((p) => p.data.category === key) },
+  }));
+}
+const { key, posts } = Astro.props;
+const c = categories[key];
+---
+<Base title={c.name} description={`${c.name} — ${c.desc}`}>
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">カテゴリ</p>
+      <h1>{c.name}</h1>
+      <p class="small">{c.desc}</p>
+    </div>
+    {posts.length > 0 ? <ul class="postlist">{posts.map((p) => <PostCard post={p} heading="h2" />)}</ul> : <p class="small">このカテゴリの記事はまだありません。</p>}
+    <p style="margin-top:1.5rem"><a href="/posts/">← 記事一覧へ</a></p>
+  </div>
+</Base>
+<style>.head { padding: 2rem 0 1.2rem; }</style>

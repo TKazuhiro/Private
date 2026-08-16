@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render } from 'astro:content';
+import { site, categories } from '../../data/site';
+import { getPosts, fmt } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((p, i) => ({
+    params: { slug: p.id },
+    props: { post: p, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
+  }));
+}
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const cat = categories[d.category];
+---
+<Base title={d.title} description={d.description} type="article" image={d.cover} publishedTime={d.date}>
+  <article class="article wrap">
+    <header class="article__head">
+      <div class="article__meta">
+        <a class="chip" href={`/category/${d.category}/`}>{cat.name}</a>
+        <time datetime={d.date.toISOString()}>{fmt(d.date)}</time>
+        {d.updated && <span>（更新: {fmt(d.updated)}）</span>}
+        {d.draft && <span class="chip" style="background:#fde8e6;color:#a33">下書き</span>}
+      </div>
+      <h1>{d.title}</h1>
+      <p class="small">{d.description}</p>
+      {d.tags.length > 0 && <p>{d.tags.map((t) => <span class="tagchip">{t}</span>)}</p>}
+    </header>
+    {d.cover && <figure class="article__cover"><img src={d.cover} alt="" width="1200" height="630" /></figure>}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <aside class="author-box">
+      <div>
+        <strong>{site.author}</strong>
+        <p>岐阜県で土地の許認可（開発許可・建築許可・盛土規制法・農地転用など）を扱う行政書士。AIを組み込んだ一人事務所を実際に回しながら、その記録をここに書いています。事務所の仕事は <a href={site.officeUrl} target="_blank" rel="noopener">{site.officeName}</a> へ。</p>
+      </div>
+    </aside>
+
+    <nav class="pager" aria-label="前後の記事">
+      {older ? <a href={`/posts/${older.id}/`}><span>← 前の記事</span>{older.data.title}</a> : <span />}
+      {newer ? <a href={`/posts/${newer.id}/`} style="text-align:right"><span>次の記事 →</span>{newer.data.title}</a> : <span />}
+    </nav>
+  </article>
+</Base>

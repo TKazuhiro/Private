@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { site, categories } from '../data/site';
+import { getPosts } from '../lib/posts';
+
+const posts = await getPosts();
+const latest = posts.slice(0, 6);
+const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].order);
+---
+<Base>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">{site.tagline}</p>
+      <h1>一人の事務所を、<br class="sp" />AIと一緒に回してみている。</h1>
+      <p class="lead">
+        岐阜県で開発許可などの許認可を扱う行政書士です。AIを組み込んだ事務所を実際に動かしながら、
+        うまくいったことも、直したところも、そのまま書いていきます。
+        士業や小さな事業をやっていて「AIは自分の仕事には関係ない」と思っている人に、そうでもないよ、と伝えたい。
+      </p>
+      <p><a class="btn" href="/posts/">記事を読む</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="sec-h">最新の記事</h2>
+      {latest.length > 0 ? (
+        <ul class="postlist">{latest.map((p) => <PostCard post={p} />)}</ul>
+      ) : (
+        <p class="small">準備中です。</p>
+      )}
+      {posts.length > 6 && <p style="margin-top:1rem"><a class="btn btn--ghost" href="/posts/">すべての記事</a></p>}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="sec-h">カテゴリ</h2>
+      <div class="cats">
+        {catList.map(([key, c]) => (
+          <a class="cat" href={`/category/${key}/`}>
+            <strong>{c.name}</strong>
+            <span>{c.desc}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #fff 0%, var(--bg) 100%); }
+  .hero h1 { font-size: 2rem; }
+  .lead { max-width: 640px; color: var(--ink-soft); }
+  .sec-h { border: 0; padding: 0; margin: 0 0 1rem; font-size: 1.2rem; }
+  .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+  .cat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.3rem; text-decoration: none; color: inherit; display: grid; gap: .3rem; }
+  .cat:hover { box-shadow: 0 6px 20px rgba(31,122,140,.10); color: inherit; }
+  .cat strong { color: var(--accent-dark); }
+  .cat span { font-size: .88rem; color: var(--ink-soft); }
+  .sp { display: none; }
+  @media (max-width: 640px) { .hero h1 { font-size: 1.5rem; } .sp { display: inline; } }
+</style>

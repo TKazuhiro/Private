@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="プライバシーポリシー" description="kazutcha.com のプライバシーポリシー。">
+  <article class="article wrap">
+    <header class="article__head"><h1>プライバシーポリシー</h1></header>
+    <div class="prose">
+      <h2>アクセス解析</h2>
+      <p>当サイトは、サイト改善のために Cloudflare Web Analytics を利用しています。Cookieを使用せず、個人を特定する情報は収集しません。</p>
+      <h2>外部サービスへのリンク</h2>
+      <p>記事内から外部サービス（X・note・GitHub など）へリンクすることがあります。リンク先の取り扱いは各サービスのポリシーに従います。</p>
+      <h2>免責</h2>
+      <p>当サイトの内容は、筆者が実務で見た範囲の記録と個人の見解です。制度の運用は自治体によって異なります。個別の案件についての判断は、各自治体の窓口や専門家にご確認ください。当サイトの情報に基づいて生じた損害について、筆者は責任を負いかねます。</p>
+      <h2>連絡先</h2>
+      <p>{site.author}／<a href={site.officeUrl} target="_blank" rel="noopener">{site.officeName}</a></p>
+    </div>
+  </article>
+</Base>
