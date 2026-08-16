@@ -10,8 +10,10 @@ export const site = {
   author: 'かずっちゃ（髙橋 一浩）',
   officeName: 'Life行政書士事務所',
   officeUrl: 'https://office-lifechange.com',
-  x: '', // 【要確認】Xのプロフィールurl（例: https://x.com/xxxx）
-  note: '', // 【要確認】noteのurl
+  x: 'https://x.com/Kazutcha01',
+  /** note は記事1本目の公開後に表示ON（noteの中身がまだ旧テーマのため）。URL: https://note.com/bluesky_hope */
+  note: '',
+  noteUrl: 'https://note.com/bluesky_hope',
   avatar: '/images/avatar-512.png', // 水彩アイコン（本人写真をもとに生成・2026-08-17）
   /** サイドのプロフィールカード用の短い自己紹介（3行） */
   bio: '岐阜県で土地の許認可を扱う行政書士。地方公務員を41歳で辞めて独立。事務に追われる個人事務所を、AIといっしょに育てている途中です。',

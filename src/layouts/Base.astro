@@ -70,6 +70,8 @@ const current = Astro.url.pathname;
         </div>
         <ul class="site-footer__nav">
           {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          {site.x && <li><a href={site.x} target="_blank" rel="noopener">X ↗</a></li>}
+          {site.note && <li><a href={site.note} target="_blank" rel="noopener">note ↗</a></li>}
           <li><a href="/rss.xml">RSS</a></li>
           <li><a href="/privacy/">プライバシーポリシー</a></li>
         </ul>
