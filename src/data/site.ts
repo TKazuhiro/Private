@@ -20,8 +20,8 @@ export const site = {
 /** サイドの固定導線「AI事務所のはじめ方 5ステップ」
  *  実際に踏んだ順（2026-07〜08の記録）。記事ができたら href を記事に差し替える */
 export const steps = [
-  { n: 1, title: '第2の脳を作る', desc: 'Obsidianに知識・案件・日誌を集める', href: '/category/dougu/' },
-  { n: 2, title: 'AIをつなぐ', desc: 'Claude Codeを脳の上で動かす', href: '/category/dougu/' },
+  { n: 1, title: 'もう一人の自分をPCに置く', desc: '価値観・文体・案件・日誌を1か所に集める', href: '/category/dougu/' },
+  { n: 2, title: 'その自分にAIをつなぐ', desc: '集めたものを読ませて、手を動かしてもらう', href: '/category/dougu/' },
   { n: 3, title: '業務を棚卸しする', desc: '30業務を並べて役割ごとに社員を立てる', href: '/category/kangaekata/' },
   { n: 4, title: '実案件で使って直す', desc: '構築の翌日から本番。詰まったら直す', href: '/category/jitsuroku/' },
   { n: 5, title: '外出先から動かす', desc: 'Discordで指示→自宅PCが無人で処理', href: '/category/dougu/' },
