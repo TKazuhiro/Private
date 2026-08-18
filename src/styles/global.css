@@ -62,8 +62,12 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
 .post-card p { grid-column: 1; margin: 0; font-size: .92rem; color: var(--ink-soft); }
 .post-card img { grid-column: 2; grid-row: 2 / span 2; width: 132px; aspect-ratio: 16/10; object-fit: cover; border-radius: 6px; }
 @media (max-width: 560px) { .post-card { grid-template-columns: 1fr; } .post-card img { grid-column: 1; grid-row: auto; width: 100%; } }
+/* 2カラム（旧ブログ AFFINGER の骨格）: メイン ＋ 右サイド。トップ・記事・一覧・カテゴリで共通 */
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2.5rem; padding-top: 2.5rem; padding-bottom: 3rem; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; gap: 2rem; } }
 /* 記事本文 */
-.article { max-width: var(--max); margin: 0 auto; }
+.article { max-width: var(--max); margin: 0; }
+.article--full { margin: 0 auto; }
 .article__head { margin: 1.5rem 0 2rem; }
 .article__head h1 { font-size: 1.9rem; }
 .article__meta { display: flex; flex-wrap: wrap; gap: .8em; align-items: center; font-size: .85rem; color: var(--muted); margin-bottom: 1rem; }

@@ -1,0 +1,71 @@
+---
+/**
+ * サイドバー（旧ブログ AFFINGER の「プロフィール／5step／カテゴリ／事務所へ」を継ぐ）
+ * トップだけでなく、記事・記事一覧・カテゴリの各ページでも同じものを出す（2026-08-18 B案）
+ */
+import { site, categories, steps } from '../data/site';
+const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].order);
+---
+<aside class="side">
+  <section class="card profile">
+    <img src={site.avatar} alt="" width="160" height="160" loading="lazy" />
+    <p class="profile__name">{site.name}</p>
+    <p class="profile__bio">{site.bio}</p>
+    <a class="profile__more" href="/about/">詳しくはこちら →</a>
+  </section>
+
+  <section class="card">
+    <h3 class="card__h">AI事務所のはじめ方 5ステップ</h3>
+    <ol class="steps">
+      {steps.map((s) => (
+        <li>
+          <a href={s.href}>
+            <span class="steps__n">{s.n}</span>
+            <span class="steps__body"><strong>{s.title}</strong><span>{s.desc}</span></span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <p class="small" style="margin:.6rem 0 0">ぼくが実際に踏んだ順です。記事ができ次第つなぎます。</p>
+  </section>
+
+  <section class="card">
+    <h3 class="card__h">カテゴリ</h3>
+    <ul class="sidelist">
+      {catList.map(([key, c]) => <li><a href={`/category/${key}/`}>{c.name}</a></li>)}
+    </ul>
+  </section>
+
+  <section class="card">
+    <h3 class="card__h">事務所の仕事</h3>
+    <p class="small" style="margin:0 0 .6rem">土地の許認可（開発許可・建築許可・盛土・農地）のご相談は事務所サイトへ。</p>
+    <a class="btn btn--ghost btn--block" href={site.officeUrl} target="_blank" rel="noopener">{site.officeName} ↗</a>
+    {site.x && <p class="small" style="margin:.8rem 0 0"><a href={site.x} target="_blank" rel="noopener">Xで、使って直した話を短く ↗</a></p>}
+  </section>
+</aside>
+
+<style>
+  .side { position: sticky; top: 1.25rem; display: grid; gap: 1.2rem; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.3rem; }
+  .card__h { margin: 0 0 .8rem; font-size: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--line); }
+  .profile { text-align: center; }
+  .profile img { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto .6rem; display: block; }
+  .profile__name { font-weight: 700; margin: 0 0 .3rem; }
+  .profile__bio { font-size: .88rem; color: var(--ink-soft); text-align: left; margin: 0 0 .7rem; }
+  .profile__more { font-size: .88rem; font-weight: 700; text-decoration: none; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+  .steps li { margin: 0; }
+  .steps a { display: grid; grid-template-columns: 30px 1fr; gap: .7rem; align-items: start; text-decoration: none; color: inherit; padding: .35rem .3rem; border-radius: 6px; }
+  .steps a:hover { background: var(--tint); color: inherit; }
+  .steps__n { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: .85rem; display: grid; place-items: center; }
+  .steps__body { display: grid; line-height: 1.5; }
+  .steps__body strong { font-size: .95rem; }
+  .steps__body span { font-size: .8rem; color: var(--muted); }
+  .sidelist { list-style: none; margin: 0; padding: 0; }
+  .sidelist li { margin: 0; border-bottom: 1px dashed var(--line); }
+  .sidelist li:last-child { border-bottom: 0; }
+  .sidelist a { display: block; padding: .5rem .2rem; text-decoration: none; color: var(--ink); font-size: .95rem; }
+  .sidelist a:hover { color: var(--accent); }
+  .btn--block { display: block; text-align: center; }
+  @media (max-width: 900px) { .side { position: static; } }
+</style>

@@ -1,21 +1,25 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { categories } from '../../data/site';
 import { getPosts } from '../../lib/posts';
 const posts = await getPosts();
 const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].order);
 ---
 <Base title="記事一覧" description="kazutcha.com の記事一覧。AI事務所の実録・士業とAIの考え方・実務の裏側・道具と手順。">
-  <div class="wrap">
+  <div class="wrap layout">
+  <main>
     <div class="head">
       <h1>記事一覧</h1>
       <p class="cats">{catList.map(([k, c]) => <a class="chip" href={`/category/${k}/`}>{c.name}</a>)}</p>
     </div>
     {posts.length > 0 ? <ul class="postlist">{posts.map((p) => <PostCard post={p} heading="h2" />)}</ul> : <p class="small">準備中です。</p>}
+  </main>
+  <Sidebar />
   </div>
 </Base>
 <style>
-  .head { padding: 2rem 0 1.2rem; }
+  .head { padding: 0 0 1.2rem; }
   .cats { display: flex; gap: .5em; flex-wrap: wrap; }
 </style>

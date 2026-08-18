@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { categories, type CategoryKey } from '../../data/site';
 import { getPosts } from '../../lib/posts';
 
@@ -15,7 +16,8 @@ const { key, posts } = Astro.props;
 const c = categories[key];
 ---
 <Base title={c.name} description={`${c.name} — ${c.desc}`}>
-  <div class="wrap">
+  <div class="wrap layout">
+  <main>
     <div class="head">
       <p class="eyebrow">カテゴリ</p>
       <h1>{c.name}</h1>
@@ -23,6 +25,8 @@ const c = categories[key];
     </div>
     {posts.length > 0 ? <ul class="postlist">{posts.map((p) => <PostCard post={p} heading="h2" />)}</ul> : <p class="small">このカテゴリの記事はまだありません。</p>}
     <p style="margin-top:1.5rem"><a href="/posts/">← 記事一覧へ</a></p>
+  </main>
+  <Sidebar />
   </div>
 </Base>
-<style>.head { padding: 2rem 0 1.2rem; }</style>
+<style>.head { padding: 0 0 1.2rem; }</style>

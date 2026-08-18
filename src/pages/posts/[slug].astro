@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { render } from 'astro:content';
 import { site, categories } from '../../data/site';
 import { getPosts, fmt } from '../../lib/posts';
@@ -17,8 +18,10 @@ const d = post.data;
 const cat = categories[d.category];
 ---
 <Base title={d.title} description={d.description} type="article" image={d.cover} publishedTime={d.date}>
-  <article class="article wrap">
+  <div class="wrap layout">
+  <article class="article">
     <header class="article__head">
+      <p class="crumb"><a href="/">HOME</a> › <a href={`/category/${d.category}/`}>{cat.name}</a></p>
       <div class="article__meta">
         <a class="chip" href={`/category/${d.category}/`}>{cat.name}</a>
         <time datetime={d.date.toISOString()}>{fmt(d.date)}</time>
@@ -48,4 +51,12 @@ const cat = categories[d.category];
       {newer ? <a href={`/posts/${newer.id}/`} style="text-align:right"><span>次の記事 →</span>{newer.data.title}</a> : <span />}
     </nav>
   </article>
+  <Sidebar />
+  </div>
 </Base>
+
+<style>
+  .crumb { font-size: .8rem; color: var(--muted); margin: 0 0 .8rem; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--accent); }
+</style>
