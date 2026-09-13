@@ -5,7 +5,13 @@ import Sidebar from '../components/Sidebar.astro';
 import { site, categories } from '../data/site';
 import { getPosts } from '../lib/posts';
 
-const posts = await getPosts();
+/**
+ * 2026-09-13 裁定（第3案）: 執筆は note に一本化し、このトップは当面「暫定1ページのハブ」。
+ * site.hubMode = true のあいだは、手紙ヒーロー＋3つの行き先（note／事務所／X）だけを出す。
+ * 元の2カラム（最新記事・カテゴリ・サイド）は hubMode = false で復活する（コードは消していない）。
+ */
+const hub = site.hubMode;
+const posts = hub ? [] : await getPosts();
 const latest = posts.slice(0, 6);
 const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].order);
 ---
@@ -27,41 +33,72 @@ const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].orde
         <p class="lead">
           士業や小さな事業をやっていて「忙しくてAIまで手が回らない」と思っているあなたに、そうでもないよ、と伝えたい。
         </p>
-        <p class="hero__actions"><a class="btn" href="/posts/">記事を読む</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
+        {hub ? (
+          <p class="hero__actions"><a class="btn" href={site.note} target="_blank" rel="noopener">note で記事を読む ↗</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
+        ) : (
+          <p class="hero__actions"><a class="btn" href="/posts/">記事を読む</a> <a class="btn btn--ghost" href="/about/">このブログについて</a></p>
+        )}
       </div>
     </div>
   </section>
 
-  <div class="wrap layout">
-    <!-- メイン: 旧ブログの「新着記事」を継ぐ -->
-    <main class="main">
-      <section>
-        <h2 class="sec-h">最新の記事</h2>
-        {latest.length > 0 ? (
-          <ul class="postlist">{latest.map((p) => <PostCard post={p} />)}</ul>
-        ) : (
-          <div class="empty">
-            <p>準備中です。最初の記事は「一人の行政書士事務所を、AIと一緒に回してみることにした」。<br />2026年の夏の記録から書き始めます。</p>
-          </div>
-        )}
-        {posts.length > 6 && <p style="margin-top:1rem"><a class="btn btn--ghost" href="/posts/">すべての記事</a></p>}
-      </section>
-
-      <section>
-        <h2 class="sec-h">カテゴリ</h2>
-        <div class="cats">
-          {catList.map(([key, c]) => (
-            <a class="cat" href={`/category/${key}/`}>
-              <strong>{c.name}</strong>
-              <span>{c.desc}</span>
+  {hub ? (
+    <div class="wrap">
+      <section class="hub">
+        <p class="hub__note">記事は note に書いています。ここは入口です。</p>
+        <div class="hub__cards">
+          <a class="hubcard" href={site.note} target="_blank" rel="noopener">
+            <span class="hubcard__k">読む</span>
+            <strong>AI事務所の実録（note）</strong>
+            <span>一人の行政書士事務所を、AI社員7名と回している記録。うまくいった話より、使って直した話。</span>
+          </a>
+          <a class="hubcard" href={site.officeUrl} target="_blank" rel="noopener">
+            <span class="hubcard__k">頼む</span>
+            <strong>{site.officeName}</strong>
+            <span>土地の許認可（開発許可・建築許可・盛土・農地）のご相談は事務所サイトへ。岐阜・愛知・三重。</span>
+          </a>
+          {site.x && (
+            <a class="hubcard" href={site.x} target="_blank" rel="noopener">
+              <span class="hubcard__k">名刺</span>
+              <strong>X（@Kazutcha01）</strong>
+              <span>記事を出したときに、ひとこと。</span>
             </a>
-          ))}
+          )}
         </div>
       </section>
-    </main>
+    </div>
+  ) : (
+    <div class="wrap layout">
+      <!-- メイン: 旧ブログの「新着記事」を継ぐ -->
+      <main class="main">
+        <section>
+          <h2 class="sec-h">最新の記事</h2>
+          {latest.length > 0 ? (
+            <ul class="postlist">{latest.map((p) => <PostCard post={p} />)}</ul>
+          ) : (
+            <div class="empty">
+              <p>準備中です。最初の記事は「一人の行政書士事務所を、AIと一緒に回してみることにした」。<br />2026年の夏の記録から書き始めます。</p>
+            </div>
+          )}
+          {posts.length > 6 && <p style="margin-top:1rem"><a class="btn btn--ghost" href="/posts/">すべての記事</a></p>}
+        </section>
 
-    <Sidebar />
-  </div>
+        <section>
+          <h2 class="sec-h">カテゴリ</h2>
+          <div class="cats">
+            {catList.map(([key, c]) => (
+              <a class="cat" href={`/category/${key}/`}>
+                <strong>{c.name}</strong>
+                <span>{c.desc}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <Sidebar />
+    </div>
+  )}
 </Base>
 
 <style>
@@ -75,7 +112,17 @@ const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].orde
   .lead { max-width: 640px; color: var(--ink-soft); margin-bottom: .9em; }
   .hero__actions { margin-top: 1.2rem; }
 
-  /* 2カラム */
+  /* 暫定ハブ */
+  .hub { padding: 2.4rem 0 1rem; }
+  .hub__note { color: var(--muted); font-size: .92rem; margin: 0 0 1rem; }
+  .hub__cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .hubcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.4rem 1.3rem; text-decoration: none; color: inherit; display: grid; gap: .35rem; align-content: start; }
+  .hubcard:hover { box-shadow: 0 6px 20px rgba(31,122,140,.10); color: inherit; }
+  .hubcard__k { font-size: .75rem; font-weight: 700; color: var(--accent-dark); letter-spacing: .08em; }
+  .hubcard strong { font-size: 1.05rem; }
+  .hubcard span:last-child { font-size: .9rem; color: var(--ink-soft); line-height: 1.6; }
+
+  /* 2カラム（hubMode=false のとき） */
   .main > section + section { margin-top: 2.5rem; }
   .sec-h { border: 0; padding: 0; margin: 0 0 1rem; font-size: 1.2rem; }
   .empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); padding: 1.2rem 1.4rem; color: var(--ink-soft); font-size: .95rem; }
@@ -87,8 +134,6 @@ const catList = Object.entries(categories).sort((a, b) => a[1].order - b[1].orde
   .cat span { font-size: .88rem; color: var(--ink-soft); }
 
   .sp { display: none; }
-  @media (max-width: 900px) {
-  }
   @media (max-width: 640px) {
     .hero { padding: 2.2rem 0 2rem; }
     .hero__in { grid-template-columns: 1fr; gap: 1rem; }

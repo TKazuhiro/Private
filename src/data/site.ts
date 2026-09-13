@@ -11,9 +11,12 @@ export const site = {
   officeName: 'Life行政書士事務所',
   officeUrl: 'https://office-lifechange.com',
   x: 'https://x.com/Kazutcha01',
-  /** note は記事1本目の公開後に表示ON（noteの中身がまだ旧テーマのため）。URL: https://note.com/bluesky_hope */
-  note: '',
-  noteUrl: 'https://note.com/bluesky_hope',
+  /** note は記事1本目の公開後に表示ON（noteの中身がまだ旧テーマのため）。note ID は 2026-09-13 に bluesky_hope → kazutcha01 へ変更済み（旧URLはリダイレクトされない） */
+  note: 'https://note.com/kazutcha01',
+  noteUrl: 'https://note.com/kazutcha01',
+  /** 2026-09-13 裁定（第3案）: 執筆は note に一本化。このサイトは当面「暫定1ページのハブ」（プロフィール＋note＋事務所HP）。
+   *  記事一覧・カテゴリ・5ステップは非表示。posts は draft のまま温存し、再判定（2026-11末）で本丸に戻すときに hubMode を false にする */
+  hubMode: true,
   avatar: '/images/avatar-512.png', // 水彩アイコン（本人写真をもとに生成・2026-08-17）
   /** サイドのプロフィールカード用の短い自己紹介（3行） */
   bio: '岐阜県で土地の許認可を扱う行政書士。地方公務員を41歳で辞めて独立。事務に追われる個人事務所を、AIといっしょに育てている途中です。',
@@ -39,8 +42,14 @@ export const categories = {
 
 export type CategoryKey = keyof typeof categories;
 
-export const nav = [
-  { href: '/posts/', label: '記事一覧' },
-  { href: '/about/', label: 'このブログについて' },
-  { href: site.officeUrl, label: '事務所サイト', external: true },
-];
+export const nav = site.hubMode
+  ? [
+      { href: site.note, label: 'note で読む', external: true },
+      { href: '/about/', label: 'このブログについて' },
+      { href: site.officeUrl, label: '事務所サイト', external: true },
+    ]
+  : [
+      { href: '/posts/', label: '記事一覧' },
+      { href: '/about/', label: 'このブログについて' },
+      { href: site.officeUrl, label: '事務所サイト', external: true },
+    ];
